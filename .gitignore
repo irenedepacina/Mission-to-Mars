@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Attach files
+Mission_to_Mars_Module.ipynb
+Mission_to_Mars.py
+Mission_Practice.ipynb
+
+
 # C extensions
 *.so
 
