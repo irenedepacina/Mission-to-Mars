@@ -111,26 +111,30 @@ def hemisphere_data(browser):
     # Find all divs with class item then find all div with class description. 
     # Find the div with class downloads, retrieve the a and its href attribute for full link of the image.
     # Build a dictionary and append the item to the list
-    for hemispheres_url in hemispheres_soup.find_all('div', class_='item'):
-        for image in hemispheres_url.find_all('div', class_='description'):
-            image_url = image.find('a').get('href')
-            image_Name = image.find('h3').get_text()
+
+    try:
+        hemispheres_url = hemispheres_soup.find_all('div', class_='item')
+    
+    except AttributeError:
+        return None
+
+    for image in hemisphere_image_urls:
+        image_url = image.find('a').get('href')
             
-            image_url_rel = base_url + image_url
+        image_url_rel = base_url + image_url
             
-            browser.visit(image_url_rel)
+        browser.visit(image_url_rel)
             
-            # Parse the resulting html with soup
-            html = browser.html
-            image_soup = soup(html, 'html.parser')
-            downloads = image_soup.find('div', class_='downloads')
-            hyperLink = downloads.find('a').get('href')
+        # Parse the resulting html with soup
+        html = browser.html
+        image_soup = soup(html, 'html.parser')
+        downloads = image_soup.find('div', class_='downloads').find('a').get('href')
+        image_Name = image_soup.find('div',class_='content').find('h2').get_text()
             
-            hemispheres = {'img_url': hyperLink,
-                    'title': image_Name}
-            hemisphere_image_urls.append(hemispheres)
-            browser.back()
-        return hemisphere_image_urls
+        hemispheres = {'img_url': hyperLink, 'title': image_Name}
+        hemisphere_image_urls.append(hemispheres)
+     
+    return hemisphere_image_urls
 
 if __name__ == "__main__":
     
